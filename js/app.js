@@ -30,6 +30,23 @@
     }).join("");
   }
 
+  var PRTS = {
+    ch0: "0-1 坍塌/BEG", ch1: "1-1 孤岛/BEG", ch2: "2-1 龙门之行/END", ch3: "3-1 会合/BEG", ch4: "4-1 免费拥抱/BEG",
+    ch5: "5-1 冤家易结/BEG", ch6: "6-1 僵局/BEG", ch7: "7-1 32:00:00/NBT", ch8: "R8-1 昨日，谷壳将裂/BEG",
+    dm: "DM-1 埋藏/BEG", sv: "SV-1 闯入者/BEG", iw: "IW-ST-1 客将至/NBT", is: "IS-ST-1 沉疴/NBT", mn: "MN-ST-1 亮相/NBT", bi: "BI-1 不欢而聚/BEG"
+  };
+  function prtsLink(id) {
+    if (!PRTS[id]) return "";
+    var url = "https://prts.wiki/w/" + encodeURIComponent(PRTS[id].replace(/ /g, "_")).replace(/%2F/g, "/");
+    return '<p class="src"><a href="' + url + '" target="_blank" rel="noopener">在 PRTS 维基查看原作剧情与官方配图 ↗</a></p>';
+  }
+  // 故事正文：在第二段后插一张场景插画
+  function storyHTML(id, paras) {
+    var art = window.AK_ART ? window.AK_ART(id) : "";
+    var head = paras.slice(0, 2), tail = paras.slice(2);
+    return '<div class="story"><p>' + head.join("</p><p>") + "</p></div>" + art + (tail.length ? '<div class="story"><p>' + tail.join("</p><p>") + "</p></div>" : "");
+  }
+
   // ---------- pages ----------
   function home() {
     var mains = A.MAIN.map(function (c) {
@@ -40,7 +57,7 @@
     }).join("");
     return '<section class="hero"><div class="kicker">ARKNIGHTS · 剧情白话版</div>' +
       "<h1>不卖关子的明日方舟</h1>" +
-      '<p class="lead">原作剧情信息量大、喜欢藏着说，很多关键反转要到好几章以后才点破。这里把主线第0–8章（整合运动篇）和六篇重要支线重新讲一遍：用大白话，按时间顺序，该解释的地方直接解释，人物关系一张图看清。</p></section>' +
+      '' + (window.AK_ART ? window.AK_ART("ch8") : "") + '<p class="lead">原作剧情信息量大、喜欢藏着说，很多关键反转要到好几章以后才点破。这里把主线第0–8章（整合运动篇）和六篇重要支线重新讲一遍：用大白话，按时间顺序，该解释的地方直接解释，人物关系一张图看清。</p></section>' +
       '<div class="panel"><h3>推荐阅读顺序</h3><ol class="steps">' +
       '<li>先花三分钟看 <a href="#/world">世界观</a>：源石、感染者、移动城市是什么。</li>' +
       '<li>打开 <a href="#/people">人物关系</a>，认识罗德岛、整合运动、龙门三方的主要人物。</li>' +
@@ -116,7 +133,7 @@
       '<div class="meta"><span>📍 ' + esc(c.place) + "</span><span>原作关卡：" + c.id.replace("ch", "") + "-x</span></div>" +
       '<div class="tldr"><div class="lbl">一句话</div>' + esc(c.tldr) + "</div>" +
       '<h3>本章登场（点名字看介绍）</h3><div class="cast">' + c.cast.map(chip).join("") + "</div>" +
-      '<h2>故事</h2><div class="story"><p>' + c.story.join("</p><p>") + "</p></div>" +
+      '<h2>故事</h2>' + storyHTML(c.id, c.story) + prtsLink(c.id) +
       '<h2>这章你需要知道</h2><div class="panel"><ul class="know"><li>' + c.know.join("</li><li>") + "</li></ul></div>" +
       '<div class="pager">' +
       (prev ? '<a href="#/main/' + prev.id + '"><small>上一章</small>' + prev.no + " " + esc(prev.title) + "</a>" : '<a href="#/world"><small>上一页</small>世界观</a>') +
@@ -139,7 +156,7 @@
       '<div class="meta"><span>📍 ' + esc(s.place) + "</span><span>🕒 " + esc(s.when) + "</span></div>" +
       '<div class="tldr"><div class="lbl">一句话</div>' + esc(s.tldr) + "</div>" +
       '<div class="panel"><b>主要人物：</b>' + esc(s.cast) + "</div>" +
-      '<h2>故事</h2><div class="story"><p>' + s.story.join("</p><p>") + "</p></div>" +
+      '<h2>故事</h2>' + storyHTML(s.id, s.story) + prtsLink(s.id) +
       '<h2>读懂这篇的关键</h2><div class="panel"><ul class="know"><li>' + s.know.join("</li><li>") + "</li></ul></div>" +
       '<div class="pager">' +
       (prev ? '<a href="#/side/' + prev.id + '"><small>上一篇</small>' + esc(prev.title) + "</a>" : '<a href="#/side"><small>返回</small>支线目录</a>') +

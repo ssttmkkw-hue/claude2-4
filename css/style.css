@@ -149,3 +149,10 @@ dl.gl dd { margin: 0; color: var(--ink); }
 .tag-main { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 4px; background: var(--c-reunion); color: #fff; margin-right: 6px; vertical-align: 2px; }
 .graph .node:focus { outline: none; }
 .graph .node:focus-visible circle { stroke: var(--accent); }
+
+/* 场景插画 */
+.scene { margin: 6px 0 26px; }
+.scene svg { display: block; width: 100%; aspect-ratio: 8 / 3; border-radius: var(--radius); box-shadow: var(--shadow); }
+.scene figcaption { text-align: center; color: var(--muted); font-size: 13px; margin-top: 6px; }
+@media (max-width: 560px) { .scene svg { aspect-ratio: 16 / 9; } }
+.src { font-size: 14px; margin: -4px 0 0; }
